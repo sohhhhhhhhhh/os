@@ -19,7 +19,7 @@ int plat_init(void)
     g_lock = CreateMutexA(NULL, FALSE, LOCK_NAME);
     if (!g_lock) return -1;
 
-    // общая память: если такая уже есть, просто откроется
+    //общая память: если такая уже есть,то она прст откроется
     HANDLE map = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE,
                                     0, sizeof(int), SHM_NAME);
     if (!map) return -1;
@@ -27,7 +27,7 @@ int plat_init(void)
     return g_shared ? 0 : -1;
 }
 
-// на винде всё само удаляется, когда закрылся последний процесс
+// на виндоус всё само удаляется, когда закрылся последний процесс
 void plat_reset(void) {}
 
 long plat_pid(void) { return (long)GetCurrentProcessId(); }
@@ -57,7 +57,7 @@ int plat_try_master(void)
     return r == WAIT_OBJECT_0 || r == WAIT_ABANDONED;
 }
 
-// ---------- потоки ----------
+//потоки
 
 struct plat_thread {
     HANDLE h;

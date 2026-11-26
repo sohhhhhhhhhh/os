@@ -22,11 +22,11 @@ static int    g_master_fd = -1;
 
 int plat_init(void)
 {
-    // семафор с именем = замок, который видят все процессы
+    //семафор с именем = замок, который видят все процессы
     g_lock = sem_open(SEM_NAME, O_CREAT, 0644, 1);
     if (g_lock == SEM_FAILED) return -1;
 
-    // общая память: кусок памяти с именем, один на все процессы
+    //общая память: кусок памяти с именем, один на все процессы
     int fd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0644);
     if (fd < 0) return -1;
 
@@ -46,7 +46,7 @@ int plat_init(void)
     return 0;
 }
 
-// они живут после выхода программы, это чтобы начать с нуля
+//они живут после выхода программы, это чтобы начать с нуля
 void plat_reset(void)
 {
     shm_unlink(SHM_NAME);
@@ -92,7 +92,7 @@ int plat_try_master(void)
     return flock(g_master_fd, LOCK_EX | LOCK_NB) == 0;
 }
 
-// ---------- потоки ----------
+//потоки
 
 struct plat_thread {
     pthread_t id;

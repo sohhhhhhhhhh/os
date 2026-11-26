@@ -8,12 +8,11 @@
 
 #define LOG_PATH "log.txt"
 
-static int        *g_counter;  // в общей памяти
-static atomic_int  g_stop;     // 1 = потокам пора заканчивать
-static const char *g_self;     // argv[0], чтобы запускать свои копии
+static int *g_counter;  // в общей памяти
+static atomic_int  g_stop;  // 1 = потокам пора заканчивать
+static const char *g_self; // argv[0], чтобы запускать свои копии
 
-// [время] PID=.. сообщение
-// вызывать только под plat_lock, тогда строки не перемешиваются
+//вызывать только под plat_lock, тогда строки не перемешиваются
 static void log_msg(const char *msg)
 {
     char t[32];
@@ -31,7 +30,7 @@ static void log_counter(const char *text)
     log_msg(msg);
 }
 
-// ---------- копии ----------
+//копии
 
 static int run_copy1(void)
 {
@@ -62,7 +61,7 @@ static int run_copy2(void)
     return 0;
 }
 
-// запускает копию, если прошлая уже закончилась (пункт 5c)
+//запускает копию, если прошлая уже закончилась
 static void spawn_copy(bg_process **slot, const char *arg, const char *name)
 {
     char msg[64];
@@ -88,7 +87,7 @@ static void spawn_copy(bg_process **slot, const char *arg, const char *name)
     }
 }
 
-// ---------- потоки ----------
+// потоки
 
 // у всех: раз в 300 мс +1
 static void timer_thread(void)
@@ -134,7 +133,7 @@ static void logger_thread(void)
     if (copy2) { bg_wait(copy2, NULL); bg_free(copy2); }
 }
 
-// ---------- main ----------
+//main
 
 int main(int argc, char **argv)
 {
